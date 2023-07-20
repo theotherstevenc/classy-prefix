@@ -1,0 +1,42 @@
+body,
+h1,
+p {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: #f5f5f5;
+}
+input,
+textarea {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+  box-shadow: 1px 2px 20px -12px;
+}
+.prefixer-container {
+  display: grid;
+  height: 100vh;
+  grid-template-rows: auto 1fr;
+}
+.input-container {
+  padding: 1em 0;
+}
+.input-container input,
+.input-container button {
+  padding: 0.5em;
+  font-size: 2em;
+}
+.textarea-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.cm-editor {
+  height: 100%;
+}
+.cm-scroller {
+  overflow: auto;
+}
+.cm-theme-light {
+  font-size: 1.6em;
+}
