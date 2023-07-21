@@ -1,42 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import CodeMirror from '@uiw/react-codemirror'
-import { html } from '@codemirror/lang-html'
+import { langs } from '@uiw/codemirror-extensions-langs'
+import { EditorView } from 'codemirror'
 
 const Main = () => {
-  const initialHTML = `
-    <html>
-      <head>
-        <style>
-          .example-class {
-            color: red;
-          }
-          .example-class-2 {
-            color: blue;
-          }
-          #example-id-1 {
-            color: blue;
-          }
-
-        </style>
-        <style>
-          .alt-class {
-            color: red;
-          }
-          .alt-class-2 {
-            color: blue;
-          }
-          #alt-id-1 {
-            color: blue;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="example-class" id="example-id">Hello, world!</div>
-      </body>
-    </html>
-`
-  const [inputString, setInputString] = useState('prefix-test')
-  const [inputMarkup, setInputMarkup] = useState(initialHTML)
+  const [inputString, setInputString] = useState('')
+  const [inputMarkup, setInputMarkup] = useState('')
   const [outputMarkup, setOutputMarkup] = useState('')
 
   const handleApplyPrefix = (html, prefix) => {
@@ -46,7 +15,7 @@ const Main = () => {
     const prefixAttributeValues = (targetAttributeValue) => {
       doc.querySelectorAll(`[${targetAttributeValue}]`).forEach((element) => {
         const currentValues = element.getAttribute(`${targetAttributeValue}`).split(' ')
-        const prefixedValues = currentValues.map((value) => `${prefix}-${value}`)
+        const prefixedValues = currentValues.map((value) => `${prefix}${value}`)
         element.setAttribute(`${targetAttributeValue}`, prefixedValues.join(' '))
       })
     }
@@ -56,16 +25,17 @@ const Main = () => {
     })
 
     doc.querySelectorAll('style').forEach((styleElement) => {
-      styleElement.innerHTML = styleElement.innerHTML.replace(/(\.)([a-zA-Z0-9_-]+)(\s*\{)/g, `$1${prefix}-$2$3`).replace(/(\#)([a-zA-Z0-9_-]+)(\s*\{)/g, `$1${prefix}-$2$3`)
+      styleElement.innerHTML = styleElement.innerHTML.replace(/(\.)([a-zA-Z0-9_-]+)(\s*\{)/g, `$1${prefix}$2$3`).replace(/(\#)([a-zA-Z0-9_-]+)(\s*\{)/g, `$1${prefix}$2$3`)
     })
 
     console.log(doc.documentElement.outerHTML)
     setOutputMarkup(doc.documentElement.outerHTML)
   }
-  const onChange = React.useCallback((value, viewUpdate) => {
+
+  const onChange = useCallback((value) => {
     setInputMarkup(value)
-    console.log('value:', value)
   }, [])
+
   return (
     <div className='prefixer-container'>
       <div className='input-container'>
@@ -87,8 +57,21 @@ const Main = () => {
         </button>
       </div>
       <div className='textarea-container'>
-        <CodeMirror options={{ lineWrapping: true }} value={inputMarkup} onChange={onChange} extensions={[html()]} style={{ fontSize: 22 }} />
-        <CodeMirror options={{ lineWrapping: true }} value={outputMarkup} extensions={[html()]} style={{ fontSize: 22 }} />
+        <CodeMirror
+          onChange={onChange}
+          value={inputMarkup}
+          basicSetup={{
+            lineNumbers: true,
+          }}
+          extensions={[langs.html(), EditorView.lineWrapping]}
+        />
+        <CodeMirror
+          value={outputMarkup}
+          basicSetup={{
+            lineNumbers: true,
+          }}
+          extensions={[langs.html(), EditorView.lineWrapping]}
+        />
       </div>
     </div>
   )
