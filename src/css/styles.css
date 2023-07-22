@@ -27,11 +27,8 @@ button {
   padding: 0.5em;
   font-size: 2em;
 }
-.textarea-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-.cm-editor {
+.cm-editor,
+.cm-theme-light {
   height: 100%;
 }
 .cm-scroller {

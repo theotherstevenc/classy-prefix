@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react'
 import CodeMirror from '@uiw/react-codemirror'
 import { langs } from '@uiw/codemirror-extensions-langs'
 import { EditorView } from 'codemirror'
+import SplitPane from 'react-split-pane'
 
 const Main = () => {
   const [inputString, setInputString] = useState('')
@@ -57,21 +58,23 @@ const Main = () => {
         </button>
       </div>
       <div className='textarea-container'>
-        <CodeMirror
-          onChange={onChange}
-          value={inputMarkup}
-          basicSetup={{
-            lineNumbers: true,
-          }}
-          extensions={[langs.html(), EditorView.lineWrapping]}
-        />
-        <CodeMirror
-          value={outputMarkup}
-          basicSetup={{
-            lineNumbers: true,
-          }}
-          extensions={[langs.html(), EditorView.lineWrapping]}
-        />
+        <SplitPane split='vertical'>
+          <CodeMirror
+            onChange={onChange}
+            value={inputMarkup}
+            basicSetup={{
+              lineNumbers: true,
+            }}
+            extensions={[langs.html(), EditorView.lineWrapping]}
+          />
+          <CodeMirror
+            value={outputMarkup}
+            basicSetup={{
+              lineNumbers: true,
+            }}
+            extensions={[langs.html(), EditorView.lineWrapping]}
+          />
+        </SplitPane>
       </div>
     </div>
   )
