@@ -1,6 +1,6 @@
 {
   "name": "classy-prefixer",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "main": "index.jsx",
   "scripts": {
@@ -17,6 +17,7 @@
     "css-loader": "^6.7.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-split-pane": "^2.0.3",
     "style-loader": "^3.3.2"
   },
   "devDependencies": {
