@@ -5,8 +5,45 @@ import { EditorView } from 'codemirror'
 import SplitPane from 'react-split-pane'
 
 const Main = () => {
+  const initialMarkup = `
+  <html>
+    <head>
+      <style>
+        .example-class {
+          color: yellow;
+        }
+        .example-class-2 {
+          color: blue;
+        }
+        .example-class-1.example-class-2 {
+          color: green;
+        }
+        #example-id-1 {
+          color: red;
+        }
+        .body {
+          color: inherit;
+        }
+      </style>
+      <style>
+        .alt-class {
+          color: orange;
+        }
+        .alt-class-2 {
+          color: purple;
+        }
+        #alt-id-1 {
+          color: pink;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="body example-class example-class-2" id="example-id">Hello, world!</div>
+    </body>
+  </html>
+`
   const [inputString, setInputString] = useState('')
-  const [inputMarkup, setInputMarkup] = useState('')
+  const [inputMarkup, setInputMarkup] = useState(initialMarkup)
   const [outputMarkup, setOutputMarkup] = useState('')
 
   const handleApplyPrefix = (html, prefix) => {
@@ -26,7 +63,7 @@ const Main = () => {
     })
 
     doc.querySelectorAll('style').forEach((styleElement) => {
-      styleElement.innerHTML = styleElement.innerHTML.replace(/(\.)([a-zA-Z0-9_-]+)(\s*\{)/g, `$1${prefix}$2$3`).replace(/(\#)([a-zA-Z0-9_-]+)(\s*\{)/g, `$1${prefix}$2$3`)
+      styleElement.innerHTML = styleElement.innerHTML.replace(/(\.)([a-zA-Z0-9_-]+)/g, `$1${prefix}$2`).replace(/(\#)([a-zA-Z0-9_-]+)/g, `$1${prefix}$2`)
     })
 
     console.log(doc.documentElement.outerHTML)
